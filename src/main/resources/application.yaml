@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: code-challenge
+  profiles:
+    default: h2
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: h2
+  datasource:
+    embedded-database-connection: h2
+    url: jdbc:h2:mem:mofiddb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres-db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - inMemory
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.data.jpa.autoconfigure.DataJpaRepositoriesAutoConfiguration
+      - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
